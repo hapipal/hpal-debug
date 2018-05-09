@@ -24,7 +24,11 @@
     "url": "https://github.com/devinivy/hpal-debug/issues"
   },
   "homepage": "https://github.com/devinivy/hpal-debug#readme",
-  "dependencies": {},
+  "dependencies": {
+    "cli-table": "0.3.x",
+    "toys": "2.x.x",
+    "word-wrap": "1.x.x"
+  },
   "peerDependencies": {
     "hapi": ">=17 <18"
   },
