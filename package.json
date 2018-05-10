@@ -36,6 +36,7 @@
     "code": "5.x.x",
     "coveralls": "3.x.x",
     "hapi": "17.x.x",
+    "hpal": "1.x.x",
     "lab": "15.x.x"
   }
 }
