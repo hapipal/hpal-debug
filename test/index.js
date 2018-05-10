@@ -133,6 +133,21 @@ describe('hpal-debug', () => {
             await exit(cli);
         });
 
+        it('server prop is defined as read-only.', async () => {
+
+            const cli = RunUtil.cli(['run', 'debug:repl'], 'repl');
+
+            await waitForPrompt(cli);
+
+            const output1 = await evaluate(cli, 'server = null, server === null');
+            expect(output1).to.equal('false');
+
+            const output2 = await evaluate(cli, 'lookup = null, lookup === null');
+            expect(output2).to.equal('true');
+
+            await exit(cli);
+        });
+
         it('is the default debug command.', async () => {
 
             const cli = RunUtil.cli(['run', 'debug'], 'repl');
