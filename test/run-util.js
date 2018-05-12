@@ -5,7 +5,7 @@ const Stream = require('stream');
 const Hpal = require('hpal');
 const DisplayError = require('hpal/lib/display-error');
 
-exports.cli = (argv, cwd, colors) => {
+exports.cli = (argv, cwd, { colors, columns } = {}) => {
 
     argv = ['x', 'x'].concat(argv); // [node, script, ...args]
     cwd = cwd ? (Path.isAbsolute(cwd) ? cwd : `${__dirname}/closet/${cwd}`) : __dirname;
@@ -16,6 +16,7 @@ exports.cli = (argv, cwd, colors) => {
 
     let output = '';
 
+    stdout.columns = columns;
     stdout.on('data', (data) => {
 
         output += data;
@@ -41,8 +42,6 @@ exports.cli = (argv, cwd, colors) => {
         .then(() => Hpal.start(options))
         .then(() => ({ err: null, output, errorOutput, options }))
         .catch((err) => {
-
-            output = output.trim(); // Ignore leading and trailing whitespace for testing purposes
 
             if (!(err instanceof DisplayError)) {
                 err.output = output;
