@@ -312,12 +312,13 @@ describe('hpal-debug', () => {
                 matches.push({ name, description });
             }
 
-            const [one, two, three, header, data, verbose, raw, ...others] = matches;
+            const [one, two, three, help, header, data, verbose, raw, ...others] = matches;
 
             expect(others).to.have.length(0);
             expect(one).to.equal({ name: 'one', description: 'Route path param' });
             expect(two).to.equal({ name: 'two', description: 'Route query param: Two things to know' });
             expect(three).to.equal({ name: 'three', description: 'Route payload param' });
+            expect(help).to.contain({ name: 'help' });
             expect(header).to.contain({ name: 'header' });
             expect(data).to.contain({ name: 'data' });
             expect(verbose).to.contain({ name: 'verbose' });
@@ -383,9 +384,9 @@ describe('hpal-debug', () => {
 
         const validateVerboseOutput = (actual, expected) => {
 
-            actual = actual.replace(/\(\d+ms\)/g, '(?ms)');                             // unknown timing
+            actual = actual.replace(/\(\d+ms\)/g, '(?ms)');                               // unknown timing
             actual = actual.replace(/^(\s*host:?\s+).+/m, (full, match) => `${match}?`);  // unknown host header
-            actual = actual.replace(/[^\S\r\n]+$/gm, '');                               // remove trailing spaces
+            actual = actual.replace(/[^\S\r\n]+$/gm, '');                                 // remove trailing spaces
 
             // unknown indentation in test
 
@@ -644,6 +645,72 @@ describe('hpal-debug', () => {
                 ────────────────────────────────────────
                 { unknown: 'code' }
             `);
+        });
+    });
+
+    describe('routes command', () => {
+
+        const normalize = (str) => {
+
+            return str
+                .replace('\nRunning debug:routes...\n\n', '')
+                .replace('\n\nComplete!\n', '');
+        };
+
+        const unindent = (str) => {
+
+            const lines = str.split('\n');
+            const [indent] = lines[1].match(/^\s*/);
+            const indentRegex = new RegExp(`^${indent}`);
+
+            str = lines.map((line) => line.replace(indentRegex, '')).join('\n');
+            str = str.trim();
+
+            return str;
+        };
+
+        const routes = (args, opts) => RunUtil.cli(['run', 'debug:routes', ...args], 'routes', opts);
+
+        it('outputs default display columns, with less content than space.', async () => {
+
+            const { output, err, errorOutput } = await routes([], { columns: 100 });
+
+            expect(err).to.not.exist();
+            expect(errorOutput).to.equal('');
+            expect(normalize(output)).to.equal(unindent(`
+                ┌────────┬──────────────┬───────────┬───────────┬────────────────────────────┐
+                │ method │ path         │ id        │ plugin    │ description                │
+                ├────────┼──────────────┼───────────┼───────────┼────────────────────────────┤
+                │ get    │ /empty       │           │ (root)    │                            │
+                ├────────┼──────────────┼───────────┼───────────┼────────────────────────────┤
+                │ put    │ /shorthand   │ shorthand │ my-plugin │ Shorthand config           │
+                ├────────┼──────────────┼───────────┼───────────┼────────────────────────────┤
+                │ patch  │ /longhand    │ longhand  │ my-plugin │ Instead, a longhand config │
+                ├────────┼──────────────┼───────────┼───────────┼────────────────────────────┤
+                │ post   │ /cors-ignore │           │ my-plugin │                            │
+                └────────┴──────────────┴───────────┴───────────┴────────────────────────────┘
+            `));
+        });
+
+        it('outputs default display columns, with more content than space.', async () => {
+
+            const { output, err, errorOutput } = await routes([], { columns: 60 });
+
+            expect(err).to.not.exist();
+            expect(errorOutput).to.equal('');
+            expect(normalize(output)).to.equal(unindent(`
+                ┌────────┬──────────────┬───────────┬───────────┬─────────────┐
+                │ method │ path         │ id        │ plugin    │ description │
+                ├────────┼──────────────┼───────────┼───────────┼─────────────┤
+                │ get    │ /empty       │           │ (root)    │             │
+                ├────────┼──────────────┼───────────┼───────────┼─────────────┤
+                │ put    │ /shorthand   │ shorthand │ my-plugin │ Shorthand … │
+                ├────────┼──────────────┼───────────┼───────────┼─────────────┤
+                │ patch  │ /longhand    │ longhand  │ my-plugin │ Instead, a… │
+                ├────────┼──────────────┼───────────┼───────────┼─────────────┤
+                │ post   │ /cors-ignore │           │ my-plugin │             │
+                └────────┴──────────────┴───────────┴───────────┴─────────────┘
+            `));
         });
     });
 });
