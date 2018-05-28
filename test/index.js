@@ -4,6 +4,7 @@
 
 const Lab = require('lab');
 const Code = require('code');
+const StripAnsi = require('strip-ansi');
 const RunUtil = require('./run-util');
 
 // Test shortcuts
@@ -169,6 +170,21 @@ describe('hpal-debug', () => {
         };
 
         const curl = (args, opts) => RunUtil.cli(['run', 'debug:curl', ...args], 'curl', opts);
+
+        it('outputs help [-h, --help].', async () => {
+
+            const { output: output1, err: err1, errorOutput: errorOutput1 } = await curl(['-h']);
+
+            expect(err1).to.not.exist();
+            expect(errorOutput1).to.equal('');
+            expect(normalize(output1)).to.contain('Usage: hpal run debug:curl <route-id> [options]');
+
+            const { output: output2, err: err2, errorOutput: errorOutput2 } = await curl(['--help']);
+
+            expect(err2).to.not.exist();
+            expect(errorOutput2).to.equal('');
+            expect(normalize(output2)).to.contain('Usage: hpal run debug:curl <route-id> [options]');
+        });
 
         it('hits route from its method and path.', async () => {
 
@@ -669,47 +685,225 @@ describe('hpal-debug', () => {
             return str;
         };
 
-        const routes = (args, opts) => RunUtil.cli(['run', 'debug:routes', ...args], 'routes', opts);
+        const routes = (args, dir, opts) => RunUtil.cli(['run', 'debug:routes', ...args], `routes/${dir}`, opts);
+
+        it('outputs help [-h, --help].', async () => {
+
+            const { output: output1, err: err1, errorOutput: errorOutput1 } = await routes(['-h'], 'main');
+
+            expect(err1).to.not.exist();
+            expect(errorOutput1).to.equal('');
+            expect(normalize(output1)).to.contain('Usage: hpal run debug:routes [options]');
+
+            const { output: output2, err: err2, errorOutput: errorOutput2 } = await routes(['--help'], 'main');
+
+            expect(err2).to.not.exist();
+            expect(errorOutput2).to.equal('');
+            expect(normalize(output2)).to.contain('Usage: hpal run debug:routes [options]');
+        });
+
+        it('fails when specifying an invalid flag.', async () => {
+
+            const { output, err, errorOutput } = await routes(['--badFlag'], 'main');
+
+            expect(err).to.exist();
+            expect(errorOutput).to.contain('Usage: hpal run debug:routes [options]');
+            expect(errorOutput).to.contain('Unknown option: badFlag');
+            expect(normalize(output)).to.equal('');
+        });
+
+        it('errors when route is not found by id.', async () => {
+
+            const { output, err, errorOutput } = await routes(['does-not-exist'], 'main');
+
+            expect(err).to.exist();
+            expect(errorOutput).to.equal('Route "does-not-exist" not found');
+            expect(normalize(output)).to.equal('');
+        });
+
+        it('errors when route is not found by method and path.', async () => {
+
+            const { output, err, errorOutput } = await routes(['post', '/does-not-exist'], 'main');
+
+            expect(err).to.exist();
+            expect(errorOutput).to.equal('Route "post /does-not-exist" not found');
+            expect(normalize(output)).to.equal('');
+        });
 
         it('outputs default display columns, with less content than space.', async () => {
 
-            const { output, err, errorOutput } = await routes([], { columns: 100 });
+            const { output, err, errorOutput } = await routes([], 'main', { columns: 100 });
 
             expect(err).to.not.exist();
             expect(errorOutput).to.equal('');
             expect(normalize(output)).to.equal(unindent(`
-                ┌────────┬──────────────┬───────────┬───────────┬────────────────────────────┐
-                │ method │ path         │ id        │ plugin    │ description                │
-                ├────────┼──────────────┼───────────┼───────────┼────────────────────────────┤
-                │ get    │ /empty       │           │ (root)    │                            │
-                ├────────┼──────────────┼───────────┼───────────┼────────────────────────────┤
-                │ put    │ /shorthand   │ shorthand │ my-plugin │ Shorthand config           │
-                ├────────┼──────────────┼───────────┼───────────┼────────────────────────────┤
-                │ patch  │ /longhand    │ longhand  │ my-plugin │ Instead, a longhand config │
-                ├────────┼──────────────┼───────────┼───────────┼────────────────────────────┤
-                │ post   │ /cors-ignore │           │ my-plugin │                            │
-                └────────┴──────────────┴───────────┴───────────┴────────────────────────────┘
+                ┌────────┬────────────┬───────────┬───────────┬────────────────────────────┐
+                │ method │ path       │ id        │ plugin    │ description                │
+                ├────────┼────────────┼───────────┼───────────┼────────────────────────────┤
+                │ get    │ /empty     │           │ (root)    │                            │
+                ├────────┼────────────┼───────────┼───────────┼────────────────────────────┤
+                │ patch  │ /longhand  │ longhand  │ my-plugin │ Instead, a longhand config │
+                ├────────┼────────────┼───────────┼───────────┼────────────────────────────┤
+                │ put    │ /shorthand │ shorthand │ my-plugin │ Shorthand config           │
+                └────────┴────────────┴───────────┴───────────┴────────────────────────────┘
             `));
         });
 
         it('outputs default display columns, with more content than space.', async () => {
 
-            const { output, err, errorOutput } = await routes([], { columns: 60 });
+            const { output, err, errorOutput } = await routes([], 'main', { columns: 60 });
 
             expect(err).to.not.exist();
             expect(errorOutput).to.equal('');
             expect(normalize(output)).to.equal(unindent(`
-                ┌────────┬──────────────┬───────────┬───────────┬─────────────┐
-                │ method │ path         │ id        │ plugin    │ description │
-                ├────────┼──────────────┼───────────┼───────────┼─────────────┤
-                │ get    │ /empty       │           │ (root)    │             │
-                ├────────┼──────────────┼───────────┼───────────┼─────────────┤
-                │ put    │ /shorthand   │ shorthand │ my-plugin │ Shorthand … │
-                ├────────┼──────────────┼───────────┼───────────┼─────────────┤
-                │ patch  │ /longhand    │ longhand  │ my-plugin │ Instead, a… │
-                ├────────┼──────────────┼───────────┼───────────┼─────────────┤
-                │ post   │ /cors-ignore │           │ my-plugin │             │
-                └────────┴──────────────┴───────────┴───────────┴─────────────┘
+                ┌────────┬────────────┬───────────┬───────────┬─────────────┐
+                │ method │ path       │ id        │ plugin    │ description │
+                ├────────┼────────────┼───────────┼───────────┼─────────────┤
+                │ get    │ /empty     │           │ (root)    │             │
+                ├────────┼────────────┼───────────┼───────────┼─────────────┤
+                │ patch  │ /longhand  │ longhand  │ my-plugin │ Instead, a… │
+                ├────────┼────────────┼───────────┼───────────┼─────────────┤
+                │ put    │ /shorthand │ shorthand │ my-plugin │ Shorthand … │
+                └────────┴────────────┴───────────┴───────────┴─────────────┘
+            `));
+        });
+
+        it('outputs info for a single route by its id.', async () => {
+
+            const { output, err, errorOutput } = await routes(['shorthand'], 'main', { columns: 100 });
+
+            expect(err).to.not.exist();
+            expect(errorOutput).to.equal('');
+            expect(normalize(output)).to.equal(unindent(`
+                ┌────────┬────────────┬───────────┬───────────┬──────────────────┐
+                │ method │ path       │ id        │ plugin    │ description      │
+                ├────────┼────────────┼───────────┼───────────┼──────────────────┤
+                │ put    │ /shorthand │ shorthand │ my-plugin │ Shorthand config │
+                └────────┴────────────┴───────────┴───────────┴──────────────────┘
+            `));
+        });
+
+        it('outputs info for a single route by its method and path.', async () => {
+
+            const { output, err, errorOutput } = await routes(['put', '/shorthand'], 'main', { columns: 100 });
+
+            expect(err).to.not.exist();
+            expect(errorOutput).to.equal('');
+            expect(normalize(output)).to.equal(unindent(`
+                ┌────────┬────────────┬───────────┬───────────┬──────────────────┐
+                │ method │ path       │ id        │ plugin    │ description      │
+                ├────────┼────────────┼───────────┼───────────┼──────────────────┤
+                │ put    │ /shorthand │ shorthand │ my-plugin │ Shorthand config │
+                └────────┴────────────┴───────────┴───────────┴──────────────────┘
+            `));
+        });
+
+        it('outputs info for a single route by its path, defaulting method to "get".', async () => {
+
+            const { output, err, errorOutput } = await routes(['/empty'], 'main', { columns: 100 });
+
+            expect(err).to.not.exist();
+            expect(errorOutput).to.equal('');
+            expect(normalize(output)).to.equal(unindent(`
+                ┌────────┬────────┬────┬────────┬─────────────┐
+                │ method │ path   │ id │ plugin │ description │
+                ├────────┼────────┼────┼────────┼─────────────┤
+                │ get    │ /empty │    │ (root) │             │
+                └────────┴────────┴────┴────────┴─────────────┘
+            `));
+        });
+
+        it('can show and hide columns with [-s, --show] and [-H, --hide].', async () => {
+
+            const args = [
+                '-H', 'method',
+                '-H', 'path',
+                '--hide', 'plugin',
+                '--hide', 'description',
+                '-s', 'vhost',
+                '-s', 'auth',
+                '--show', 'cors',
+                '--show', 'tags'
+            ];
+
+            const { output, err, errorOutput } = await routes(args, 'main', { columns: 100 });
+
+            expect(err).to.not.exist();
+            expect(errorOutput).to.equal('');
+            expect(normalize(output)).to.equal(unindent(`
+                ┌───────────┬─────────────┬─────────────────┬─────────────────┬──────────────┐
+                │ id        │ vhost       │ auth            │ cors            │ tags         │
+                ├───────────┼─────────────┼─────────────────┼─────────────────┼──────────────┤
+                │           │             │ (none)          │ (off)           │              │
+                ├───────────┼─────────────┼─────────────────┼─────────────────┼──────────────┤
+                │ longhand  │ hapipal.com │ (try)           │ hapipal.com     │ my-tag       │
+                │           │             │ first-strategy  │ www.hapipal.com │ my-other-tag │
+                │           │             │ second-strategy │                 │              │
+                ├───────────┼─────────────┼─────────────────┼─────────────────┼──────────────┤
+                │ shorthand │             │ first-strategy  │ *               │ my-tag       │
+                └───────────┴─────────────┴─────────────────┴─────────────────┴──────────────┘
+            `));
+        });
+
+        it('displays cors "ignore" setting correctly.', async () => {
+
+            const { output, err, errorOutput } = await routes(['-s', 'cors', '-H', 'description'], 'cors-ignore', { columns: 60 });
+
+            expect(err).to.not.exist();
+            expect(errorOutput).to.equal('');
+            expect(normalize(output)).to.equal(unindent(`
+                ┌────────┬──────────────┬────┬────────┬──────────┐
+                │ method │ path         │ id │ plugin │ cors     │
+                ├────────┼──────────────┼────┼────────┼──────────┤
+                │ post   │ /cors-ignore │    │ (root) │ (ignore) │
+                └────────┴──────────────┴────┴────────┴──────────┘
+            `));
+        });
+
+        it('displays routes grouped by plugin.', async () => {
+
+            const { output, err, errorOutput } = await routes([], 'plugin-groups', { columns: 100 });
+
+            expect(err).to.not.exist();
+            expect(errorOutput).to.equal('');
+            expect(normalize(output)).to.equal(unindent(`
+                ┌────────┬────────┬────┬─────────────┬─────────────┐
+                │ method │ path   │ id │ plugin      │ description │
+                ├────────┼────────┼────┼─────────────┼─────────────┤
+                │ get    │ /one   │    │ (root)      │             │
+                ├────────┼────────┼────┼─────────────┼─────────────┤
+                │ post   │ /two   │    │ (root)      │             │
+                ├────────┼────────┼────┼─────────────┼─────────────┤
+                │ get    │ /one-a │    │ my-plugin-a │             │
+                ├────────┼────────┼────┼─────────────┼─────────────┤
+                │ post   │ /two-a │    │ my-plugin-a │             │
+                ├────────┼────────┼────┼─────────────┼─────────────┤
+                │ get    │ /one-b │    │ my-plugin-b │             │
+                ├────────┼────────┼────┼─────────────┼─────────────┤
+                │ post   │ /two-b │    │ my-plugin-b │             │
+                └────────┴────────┴────┴─────────────┴─────────────┘
+            `));
+        });
+
+        it('displays table in color when supported.', async () => {
+
+            const { output, err, errorOutput } = await routes(['get', '/empty'], 'main', { colors: true, columns: 100 });
+
+            expect(err).to.not.exist();
+            expect(errorOutput).to.equal('');
+            expect(normalize(output)).to.not.equal(unindent(`
+                ┌────────┬────────┬────┬────────┬─────────────┐
+                │ method │ path   │ id │ plugin │ description │
+                ├────────┼────────┼────┼────────┼─────────────┤
+                │ get    │ /empty │    │ (root) │             │
+                └────────┴────────┴────┴────────┴─────────────┘
+            `));
+            expect(normalize(StripAnsi(output))).to.equal(unindent(`
+                ┌────────┬────────┬────┬────────┬─────────────┐
+                │ method │ path   │ id │ plugin │ description │
+                ├────────┼────────┼────┼────────┼─────────────┤
+                │ get    │ /empty │    │ (root) │             │
+                └────────┴────────┴────┴────────┴─────────────┘
             `));
         });
     });
