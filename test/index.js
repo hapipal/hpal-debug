@@ -401,7 +401,6 @@ describe('hpal-debug', () => {
         const validateVerboseOutput = (actual, expected) => {
 
             actual = actual.replace(/\(\d+ms\)/g, '(?ms)');                               // unknown timing
-            actual = actual.replace(/^(\s*host:?\s+).+/m, (full, match) => `${match}?`);  // unknown host header
             actual = actual.replace(/[^\S\r\n]+$/gm, '');                                 // remove trailing spaces
 
             // unknown indentation in test
@@ -432,7 +431,7 @@ describe('hpal-debug', () => {
                 request headers
                 ────────────────────────────────────────
                  user-agent        shot
-                 host              ?
+                 host              hapipal:0
                  content-type      application/json
                  content-length    2
 
@@ -463,7 +462,7 @@ describe('hpal-debug', () => {
                 request headers
                 ────────────────────────────────────────
                  user-agent        shot
-                 host              ?
+                 host              hapipal:0
                  content-type      application/json
                  content-length    2
 
@@ -498,7 +497,7 @@ describe('hpal-debug', () => {
                 request headers
                 ────────────────────────────────────────
                  user-agent        shot
-                 host              ?
+                 host              hapipal:0
                  content-length    22
 
                 response headers
@@ -525,7 +524,7 @@ describe('hpal-debug', () => {
                 request headers
                 ────────────────────────────────────────
                  user-agent        shot
-                 host              ?
+                 host              hapipal:0
                  content-type      application/json
                  content-length    2
 
@@ -558,7 +557,7 @@ describe('hpal-debug', () => {
                 ────────────────────────────────────────
                  content-type      text/plain
                  user-agent        shot
-                 host              ?
+                 host              hapipal:0
                  content-length    9
 
                 response headers
@@ -585,7 +584,7 @@ describe('hpal-debug', () => {
                 request headers
                 ────────────────────────────────────────
                 user-agent: shot
-                host: ?
+                host: hapipal:0
                 content-type: application/json
                 content-length: 2
 
@@ -619,7 +618,7 @@ describe('hpal-debug', () => {
                 request headers
                 ────────────────────────────────────────
                 user-agent: shot
-                host: ?
+                host: hapipal:0
                 content-length: 22
 
                 response headers
@@ -646,7 +645,7 @@ describe('hpal-debug', () => {
                 request headers
                 ────────────────────────────────────────
                  user-agent        shot
-                 host              ?
+                 host              hapipal:0
                  content-type      application/json
                  content-length    2
 

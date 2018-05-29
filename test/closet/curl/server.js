@@ -6,7 +6,9 @@ const HpalDebug = require('../../..');
 
 exports.deployment = async () => {
 
-    const server = Hapi.server();
+    const server = Hapi.server({
+        host: 'hapipal'
+    });
 
     await server.register(HpalDebug);
 
