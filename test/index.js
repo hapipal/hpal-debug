@@ -169,6 +169,8 @@ describe('hpal-debug', () => {
                 .replace('\nComplete!\n', '');  // Raw output doesn't have extra newline
         };
 
+        const ignoreNewlines = (str) => str.replace(/\s*\n\s*/g, ' ');
+
         const curl = (args, opts) => RunUtil.cli(['run', 'debug:curl', ...args], 'curl', opts);
 
         it('outputs help [-h, --help].', async () => {
@@ -246,7 +248,7 @@ describe('hpal-debug', () => {
 
             expect(err).to.not.exist();
             expect(errorOutput).to.equal('');
-            expect(normalize(output)).to.equal('{ one: 1,\n  two: \'2/2\',\n  three: \'3\' }');
+            expect(ignoreNewlines(normalize(output))).to.equal('{ one: 1, two: \'2/2\', three: \'3\' }');
         });
 
         it('can specify path params as flags (without optional param).', async () => {
@@ -255,7 +257,7 @@ describe('hpal-debug', () => {
 
             expect(err).to.not.exist();
             expect(errorOutput).to.equal('');
-            expect(normalize(output)).to.equal('{ one: 1,\n  two: \'2/2\' }');
+            expect(ignoreNewlines(normalize(output))).to.equal('{ one: 1, two: \'2/2\' }');
         });
 
         it('can specify query params as flags.', async () => {
@@ -264,7 +266,7 @@ describe('hpal-debug', () => {
 
             expect(err).to.not.exist();
             expect(errorOutput).to.equal('');
-            expect(normalize(output)).to.equal('{ isOne: true,\n  two: 2 }');
+            expect(ignoreNewlines(normalize(output))).to.equal('{ isOne: true, two: 2 }');
         });
 
         it('can specify query params in the path and as flags.', async () => {
@@ -273,7 +275,7 @@ describe('hpal-debug', () => {
 
             expect(err).to.not.exist();
             expect(errorOutput).to.equal('');
-            expect(normalize(output)).to.equal('{ three: \'3\',\n  two: 2 }');
+            expect(ignoreNewlines(normalize(output))).to.equal('{ three: \'3\', two: 2 }');
         });
 
         it('can specify payload params as flags.', async () => {
@@ -282,7 +284,7 @@ describe('hpal-debug', () => {
 
             expect(err).to.not.exist();
             expect(errorOutput).to.equal('');
-            expect(normalize(output)).to.equal('{ isOne: true,\n  two: 2 }');
+            expect(ignoreNewlines(normalize(output))).to.equal('{ isOne: true, two: 2 }');
         });
 
         it('ignores validation when exists but is not a Joi schema.', async () => {
@@ -309,7 +311,7 @@ describe('hpal-debug', () => {
 
             expect(err).to.not.exist();
             expect(errorOutput).to.equal('');
-            expect(normalize(output)).to.equal('{ single: \n   [ 1,\n     2 ],\n  mixed: \n   [ \'one\',\n     2 ] }');
+            expect(ignoreNewlines(normalize(output))).to.equal('{ single: [ 1, 2 ], mixed: [ \'one\', 2 ] }');
         });
 
         it('fails when specifying an invalid flag, shows params and descriptions in usage.', async () => {
@@ -347,9 +349,9 @@ describe('hpal-debug', () => {
 
             expect(err).to.not.exist();
             expect(errorOutput).to.equal('');
-            expect(normalize(output)).to.contain('\'my-header\': \n   [ \'one\',\n     \'two\' ]');
-            expect(normalize(output)).to.contain('\'my-other-header\': \'three\'');
-            expect(normalize(output)).to.contain('\'my-last-header\': \'\'');
+            expect(ignoreNewlines(normalize(output))).to.contain('\'my-header\': [ \'one\', \'two\' ]');
+            expect(ignoreNewlines(normalize(output))).to.contain('\'my-other-header\': \'three\'');
+            expect(ignoreNewlines(normalize(output))).to.contain('\'my-last-header\': \'\'');
         });
 
         it('can specify payload with -d, --data flag.', async () => {
@@ -362,7 +364,7 @@ describe('hpal-debug', () => {
 
             expect(err1).to.not.exist();
             expect(errorOutput1).to.equal('');
-            expect(normalize(output1)).to.equal('{ isOne: true,\n  two: 2 }');
+            expect(ignoreNewlines(normalize(output1))).to.equal('{ isOne: true, two: 2 }');
 
             const {
                 output: output2,
@@ -372,7 +374,7 @@ describe('hpal-debug', () => {
 
             expect(err2).to.not.exist();
             expect(errorOutput2).to.equal('');
-            expect(normalize(output2)).to.equal('{ isOne: true,\n  two: 2 }');
+            expect(ignoreNewlines(normalize(output2))).to.equal('{ isOne: true, two: 2 }');
         });
 
         it('can specify raw mode with -r, --raw flag.', async () => {
@@ -402,6 +404,12 @@ describe('hpal-debug', () => {
 
             actual = actual.replace(/\(\d+ms\)/g, '(?ms)');                               // unknown timing
             actual = actual.replace(/[^\S\r\n]+$/gm, '');                                 // remove trailing spaces
+
+            const actualLines = actual.split('\n');
+            const indexOfPayload = actualLines.length - actualLines.slice().reverse().findIndex((line) => line.match(/^─+$/));
+
+            actual = actualLines.slice(0, indexOfPayload).join('\n') + '\n' +
+                ignoreNewlines(actualLines.slice(indexOfPayload).join('\n'));
 
             // unknown indentation in test
 
