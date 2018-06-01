@@ -42,6 +42,9 @@ Lead Maintainer - [Devin Ivy](https://github.com/devinivy)
    const Hapi = require('hapi');
    const AppPlugin = require('./app');
 
+   // hpal will look for and use exports.deployment()
+   // as defined below to obtain a hapi server
+
    exports.deployment = async (start) => {
 
        const server = Hapi.server();
@@ -154,17 +157,17 @@ A summary of these options can be displayed with the `-h` `--help` flag.
 ```
 $ hpal run debug:curl /user -v
 
-get /user (47ms)
+get /user (30ms)
 
 request headers
-────────────────────────────────────────────────────────────────────────────────
+───────────────────────────────────────────────────────────────────
  user-agent        shot
- host              my-computer.local:0
+ host              your-computer.local:0
  content-type      application/json
  content-length    2
 
 response headers
-────────────────────────────────────────────────────────────────────────────────
+───────────────────────────────────────────────────────────────────
  content-type      application/json; charset=utf-8
  vary              origin
  cache-control     no-cache
@@ -173,7 +176,7 @@ response headers
  connection        close
 
 result (200 ok)
-────────────────────────────────────────────────────────────────────────────────
+───────────────────────────────────────────────────────────────────
 {
   id: 42,
   firstName: 'Paldo',

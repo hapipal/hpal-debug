@@ -163,10 +163,7 @@ describe('hpal-debug', () => {
 
         const normalize = (str) => {
 
-            return str
-                .replace('\nRunning debug:curl...\n\n', '')
-                .replace('\n\nComplete!\n', '')
-                .replace('\nComplete!\n', '');  // Raw output doesn't have extra newline
+            return str.trim();
         };
 
         const ignoreNewlines = (str) => str.replace(/\s*\n\s*/g, ' ');
@@ -675,9 +672,7 @@ describe('hpal-debug', () => {
 
         const normalize = (str) => {
 
-            return str
-                .replace('\nRunning debug:routes...\n\n', '')
-                .replace('\n\nComplete!\n', '');
+            return str.trim();
         };
 
         const unindent = (str) => {
