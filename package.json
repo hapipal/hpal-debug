@@ -1,6 +1,6 @@
 {
   "name": "hpal-debug",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "hapijs debugging tools for the hpal CLI",
   "main": "lib/index.js",
   "engines": {
