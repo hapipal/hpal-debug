@@ -171,6 +171,29 @@ describe('hpal-debug', () => {
 
         const ignoreNewlines = (str) => str.replace(/\s*\n\s*/g, ' ');
 
+        const validateVerboseOutput = (actual, expected) => {
+
+            actual = actual.replace(/\(\d+ms\)/g, '(?ms)');                               // unknown timing
+            actual = actual.replace(/[^\S\r\n]+$/gm, '');                                 // remove trailing spaces
+
+            const actualLines = actual.split('\n');
+            const indexOfPayload = actualLines.length - actualLines.slice().reverse().findIndex((line) => line.match(/^─+$/));
+
+            actual = actualLines.slice(0, indexOfPayload).join('\n') + '\n' +
+                ignoreNewlines(actualLines.slice(indexOfPayload).join('\n'));
+
+            // unknown indentation in test
+
+            const expectedLines = expected.split('\n');
+            const [indent] = expectedLines[1].match(/^\s*/);
+            const indentRegex = new RegExp(`^${indent}`);
+
+            expected = expectedLines.map((line) => line.replace(indentRegex, '')).join('\n');
+            expected = expected.trim();
+
+            expect(actual).to.equal(expected);
+        };
+
         const curl = (args, opts) => RunUtil.cli(['run', 'debug:curl', ...args], 'curl', opts);
 
         it('outputs help [-h, --help].', async () => {
@@ -399,29 +422,6 @@ describe('hpal-debug', () => {
             expect(errorOutput2).to.equal('');
             expect(normalize(output2)).to.equal('{"isOne":true,"two":2}');
         });
-
-        const validateVerboseOutput = (actual, expected) => {
-
-            actual = actual.replace(/\(\d+ms\)/g, '(?ms)');                               // unknown timing
-            actual = actual.replace(/[^\S\r\n]+$/gm, '');                                 // remove trailing spaces
-
-            const actualLines = actual.split('\n');
-            const indexOfPayload = actualLines.length - actualLines.slice().reverse().findIndex((line) => line.match(/^─+$/));
-
-            actual = actualLines.slice(0, indexOfPayload).join('\n') + '\n' +
-                ignoreNewlines(actualLines.slice(indexOfPayload).join('\n'));
-
-            // unknown indentation in test
-
-            const expectedLines = expected.split('\n');
-            const [indent] = expectedLines[1].match(/^\s*/);
-            const indentRegex = new RegExp(`^${indent}`);
-
-            expected = expectedLines.map((line) => line.replace(indentRegex, '')).join('\n');
-            expected = expected.trim();
-
-            expect(actual).to.equal(expected);
-        };
 
         it('can specify verbose mode with -v, --verbose flag (without payload).', async () => {
 
