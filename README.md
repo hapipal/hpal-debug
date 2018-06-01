@@ -16,7 +16,7 @@ Lead Maintainer - [Devin Ivy](https://github.com/devinivy)
 
 ## Installation
 > **Note**
-> If you're getting started with [the pal boilerplate](https://github.com/hapipal/boilerplate), then your project is already setup with hpal-debug!
+> If you're getting started with [the pal boilerplate](https://github.com/hapipal/boilerplate), then your project is already setup with hpal-debug!  If you would like to integrate hpal-debug into an existing pal boilerplate project, [here's](https://github.com/hapipal/boilerplate/pull/54/files) how we suggest doing it.
 
 1. Install the hpal-debug package from npm as a dev dependency.
 
