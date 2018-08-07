@@ -144,6 +144,15 @@ hpal run debug:curl patch /user/42 --hometown "Buenos Aires"
 hpal run debug:curl user-update --id 42 --hometown "Buenos Aires"
 ```
 
+Nested parameters may also be specified.  If the route in the previous example validated payloads of the form `{ user: { hometown } }`, one might use one of the following commands instead,
+```sh
+hpal run debug:curl user-update --id 42 --user-hometown "Buenos Aires"
+
+# or
+
+hpal run debug:curl user-update --id 42 --user '{ "hometown": "Buenos Aires" }'
+```
+
 The `-d` `--data` flag may be used to specify a request payload as a raw string.
 
 The `-H` `--header` flag may be used to specify a request header in the format `header-name: header value`.  This flag may be used multiple times to set multiple headers.
