@@ -170,10 +170,8 @@ get /user (30ms)
 
 request headers
 ───────────────────────────────────────────────────────────────────
- user-agent        shot
- host              your-computer.local:0
- content-type      application/json
- content-length    2
+ user-agent    shot
+ host          your-computer.local:0
 
 response headers
 ───────────────────────────────────────────────────────────────────
@@ -182,7 +180,6 @@ response headers
  cache-control     no-cache
  content-length    55
  accept-ranges     bytes
- connection        close
 
 result (200 ok)
 ───────────────────────────────────────────────────────────────────
