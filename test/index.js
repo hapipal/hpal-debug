@@ -307,6 +307,20 @@ describe('hpal-debug', () => {
             expect(ignoreNewlines(normalize(output))).to.equal('{ isOne: true, two: 2 }');
         });
 
+        it('can specify deep payload params as flags.', async () => {
+
+            const { output, err, errorOutput } = await curl([
+                'use-deep-payload',
+                '--isOne',
+                '--objOne-objTwo-isFour',
+                '--objOne-objThree', '{"six":6}'
+            ]);
+
+            expect(err).to.not.exist();
+            expect(errorOutput).to.equal('');
+            expect(ignoreNewlines(normalize(output))).to.equal('{ isOne: true, objOne: { objTwo: { isFour: true }, objThree: { six: 6 } } }');
+        });
+
         it('ignores validation when exists but is not a Joi schema.', async () => {
 
             const { output, err, errorOutput } = await curl(['use-no-joi-validation']);
@@ -435,10 +449,8 @@ describe('hpal-debug', () => {
 
                 request headers
                 ────────────────────────────────────────
-                 user-agent        shot
-                 host              hapipal:0
-                 content-type      application/json
-                 content-length    2
+                 user-agent    shot
+                 host          hapipal:0
 
                 response headers
                 ────────────────────────────────────────
@@ -446,7 +458,6 @@ describe('hpal-debug', () => {
                  cache-control     no-cache
                  content-length    22
                  accept-ranges     bytes
-                 connection        close
 
                 result (200 ok)
                 ────────────────────────────────────────
@@ -466,10 +477,8 @@ describe('hpal-debug', () => {
 
                 request headers
                 ────────────────────────────────────────
-                 user-agent        shot
-                 host              hapipal:0
-                 content-type      application/json
-                 content-length    2
+                 user-agent    shot
+                 host          hapipal:0
 
                 response headers
                 ────────────────────────────────────────
@@ -477,7 +486,6 @@ describe('hpal-debug', () => {
                  cache-control     no-cache
                  content-length    22
                  accept-ranges     bytes
-                 connection        close
 
                 result (200 ok)
                 ────────────────────────────────────────
@@ -514,34 +522,6 @@ describe('hpal-debug', () => {
                 result (200 ok)
                 ────────────────────────────────────────
                 { isOne: true, two: 2 }
-            `);
-        });
-
-        it('can specify verbose mode with -v (with payload empty object).', async () => {
-
-            const { output, err, errorOutput } = await curl(['use-payload', '-v'], { columns: 60 });
-
-            expect(err).to.not.exist();
-            expect(errorOutput).to.equal('');
-            validateVerboseOutput(normalize(output), `
-                post /payload (?ms)
-
-                request headers
-                ────────────────────────────────────────
-                 user-agent        shot
-                 host              hapipal:0
-                 content-type      application/json
-                 content-length    2
-
-                response headers
-                ────────────────────────────────────────
-                 content-type      application/json; charset=utf-8
-                 cache-control     no-cache
-                 content-length    2
-
-                result (200 ok)
-                ────────────────────────────────────────
-                {}
             `);
         });
 
@@ -590,8 +570,6 @@ describe('hpal-debug', () => {
                 ────────────────────────────────────────
                 user-agent: shot
                 host: hapipal:0
-                content-type: application/json
-                content-length: 2
 
                 response headers
                 ────────────────────────────────────────
@@ -599,7 +577,6 @@ describe('hpal-debug', () => {
                 cache-control: no-cache
                 content-length: 22
                 accept-ranges: bytes
-                connection: close
 
                 result (200 ok)
                 ────────────────────────────────────────
@@ -649,17 +626,14 @@ describe('hpal-debug', () => {
 
                 request headers
                 ────────────────────────────────────────
-                 user-agent        shot
-                 host              hapipal:0
-                 content-type      application/json
-                 content-length    2
+                 user-agent    shot
+                 host          hapipal:0
 
                 response headers
                 ────────────────────────────────────────
                  content-type      application/json; charset=utf-8
                  cache-control     no-cache
                  content-length    18
-                 connection        close
 
                 result (420 unknown)
                 ────────────────────────────────────────

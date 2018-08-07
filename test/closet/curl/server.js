@@ -83,6 +83,32 @@ exports.deployment = async () => {
         },
         {
             method: 'post',
+            path: '/deep-payload',
+            options: {
+                id: 'use-deep-payload',
+                validate: {
+                    payload: {
+                        isOne: Joi.boolean().truthy('true'),
+                        objOne: {
+                            two: Joi.number(),
+                            objTwo: {
+                                isFour: Joi.boolean().truthy('true'),
+                                five: Joi.string()
+                            },
+                            objThree: {
+                                six: Joi.number()
+                            },
+                            objFour: {
+                                seven: Joi.string()
+                            }
+                        }
+                    }
+                },
+                handler: ({ payload }) => payload
+            }
+        },
+        {
+            method: 'post',
             path: '/no-joi-validation/{param?}',
             options: {
                 id: 'use-no-joi-validation',
