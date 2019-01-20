@@ -37,15 +37,15 @@
     "word-wrap": "1.x.x"
   },
   "peerDependencies": {
-    "hapi": ">=17 <18"
+    "hapi": ">=17 <19"
   },
   "devDependencies": {
     "code": "5.x.x",
     "coveralls": "3.x.x",
-    "hapi": "17.x.x",
+    "hapi": "18.x.x",
     "hpal": "1.x.x",
-    "joi": "13.x.x",
-    "lab": "15.x.x",
-    "strip-ansi": "4.x.x"
+    "joi": "14.x.x",
+    "lab": "18.x.x",
+    "strip-ansi": "5.x.x"
   }
 }

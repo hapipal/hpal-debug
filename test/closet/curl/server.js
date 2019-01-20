@@ -189,6 +189,14 @@ exports.deployment = async () => {
                 id: 'unknown-status-code',
                 handler: (request, h) => h.response({ unknown: 'code' }).code(420)
             }
+        },
+        {
+            method: 'get',
+            path: '/null-response',
+            options: {
+                id: 'null-response',
+                handler: () => null
+            }
         }
     ]);
 

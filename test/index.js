@@ -307,6 +307,15 @@ describe('hpal-debug', () => {
             expect(ignoreNewlines(normalize(output))).to.equal('{ isOne: true, two: 2 }');
         });
 
+        it('displays null response.', async () => {
+
+            const { output, err, errorOutput } = await curl(['null-response']);
+
+            expect(err).to.not.exist();
+            expect(errorOutput).to.equal('');
+            expect(ignoreNewlines(normalize(output))).to.equal('null');
+        });
+
         it('can specify deep payload params as flags.', async () => {
 
             const { output, err, errorOutput } = await curl([
