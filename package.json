@@ -51,6 +51,6 @@
     "schmervice": "1.x.x",
     "schwifty": "4.x.x",
     "strip-ansi": "5.x.x",
-    "uuid": "^3.3.2"
+    "uuid": "3.x.x"
   }
 }
