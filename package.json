@@ -45,7 +45,12 @@
     "hapi": "18.x.x",
     "hpal": "1.x.x",
     "joi": "14.x.x",
+    "knex": "0.16.x",
     "lab": "18.x.x",
-    "strip-ansi": "5.x.x"
+    "objection": "1.x.x",
+    "schmervice": "1.x.x",
+    "schwifty": "4.x.x",
+    "strip-ansi": "5.x.x",
+    "uuid": "^3.3.2"
   }
 }

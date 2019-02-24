@@ -101,7 +101,7 @@ A summary of these options can be displayed with the `-h` `--help` flag.
 > hpal run debug:repl
 > ```
 
-This command starts a fully-featured interactive REPL with your initialized `server` in context.  Each of your server's methods and properties are also made directly available for convenience.  You may also call this command using `hpal run debug`.
+This command starts a fully-featured interactive REPL with your initialized `server` in context.  Each of your server's methods, properties, [schwifty](https://github.com/hapipal/schwifty) models, and [schmervice](https://github.com/hapipal/schmervice) services are also made directly available for convenience.  Under [hpal](https://github.com/hapipal/hpal) v2 you can use top-level `await`.  You may also call this command using `hpal run debug`.
 
 ##### Example
 ```js

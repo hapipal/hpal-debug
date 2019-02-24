@@ -5,7 +5,7 @@ const Stream = require('stream');
 const Hpal = require('hpal');
 const DisplayError = require('hpal/lib/display-error');
 
-exports.cli = (argv, cwd, { colors, columns } = {}) => {
+exports.cli = (argv, cwd, { colors, columns, isTTY = false, env = {} } = {}) => {
 
     argv = ['x', 'x'].concat(argv); // [node, script, ...args]
     cwd = cwd ? (Path.isAbsolute(cwd) ? cwd : `${__dirname}/closet/${cwd}`) : __dirname;
@@ -17,6 +17,7 @@ exports.cli = (argv, cwd, { colors, columns } = {}) => {
     let output = '';
 
     stdout.columns = columns;
+    stdout.isTTY = isTTY;
     stdout.on('data', (data) => {
 
         output += data;
@@ -31,6 +32,7 @@ exports.cli = (argv, cwd, { colors, columns } = {}) => {
 
     const options = {
         argv,
+        env,
         cwd,
         in: stdin,
         out: stdout,

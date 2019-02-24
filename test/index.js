@@ -2,8 +2,14 @@
 
 // Load modules
 
+const Fs = require('fs');
+const Os = require('os');
+const Path = require('path');
+const { REPLServer } = require('repl');
+const Util = require('util');
 const Lab = require('lab');
 const Code = require('code');
+const Uuid = require('uuid');
 const StripAnsi = require('strip-ansi');
 const RunUtil = require('./run-util');
 
@@ -56,9 +62,13 @@ describe('hpal-debug', () => {
             await cli;
         };
 
+        const repl = (args = [], dir = 'main', opts) => RunUtil.cli(['run', 'debug:repl', ...args], `repl/${dir}`, opts);
+
+        const readFile = Util.promisify(Fs.readFile);
+
         it('has server in context.', async () => {
 
-            const cli = RunUtil.cli(['run', 'debug:repl'], 'repl');
+            const cli = repl();
 
             await waitForPrompt(cli);
 
@@ -76,7 +86,7 @@ describe('hpal-debug', () => {
 
         it('has server\'s own properties in context.', async () => {
 
-            const cli = RunUtil.cli(['run', 'debug:repl'], 'repl');
+            const cli = repl();
 
             await waitForPrompt(cli);
 
@@ -94,7 +104,7 @@ describe('hpal-debug', () => {
 
         it('has server\'s prototype chain\'s properties in context.', async () => {
 
-            const cli = RunUtil.cli(['run', 'debug:repl'], 'repl');
+            const cli = repl();
 
             await waitForPrompt(cli);
 
@@ -106,7 +116,7 @@ describe('hpal-debug', () => {
 
         it('does not have private server properties in context.', async () => {
 
-            const cli = RunUtil.cli(['run', 'debug:repl'], 'repl');
+            const cli = repl();
 
             await waitForPrompt(cli);
 
@@ -118,7 +128,7 @@ describe('hpal-debug', () => {
 
         it('does not clobber props on standard REPL context.', async () => {
 
-            const cli = RunUtil.cli(['run', 'debug:repl'], 'repl');
+            const cli = repl();
 
             await waitForPrompt(cli);
 
@@ -133,7 +143,7 @@ describe('hpal-debug', () => {
 
         it('server prop is defined as read-only.', async () => {
 
-            const cli = RunUtil.cli(['run', 'debug:repl'], 'repl');
+            const cli = repl();
 
             await waitForPrompt(cli);
 
@@ -146,9 +156,54 @@ describe('hpal-debug', () => {
             await exit(cli);
         });
 
+        it('has schwifty models and schmervice services in context, without clobbering existing context.', async () => {
+
+            const cli = repl([], 'pal-plugins');
+
+            await waitForPrompt(cli);
+
+            const output1 = await evaluate(cli, 'MyModel.exists === \'indeedy\'');
+            expect(output1).to.equal('true');
+
+            const output2 = await evaluate(cli, 'myService.exists === \'indeedy\'');
+            expect(output2).to.equal('true');
+
+            const output3 = await evaluate(cli, 'Buffer.exists === \'indeedy\'');
+            expect(output3).to.equal('false');
+
+            const output4 = await evaluate(cli, 'events.exists === \'indeedy\'');
+            expect(output4).to.equal('false');
+
+            await exit(cli);
+        });
+
+        it('sets-up history when applicable.', async () => {
+
+            if (!REPLServer.prototype.setupHistory) {
+                return;
+            }
+
+            const uuid = Uuid.v4();
+            const historyFile = Path.join(Os.tmpdir(), uuid);
+
+            const cli = RunUtil.cli(['run', 'debug'], 'repl/main', {
+                isTTY: true,
+                env: {
+                    NODE_REPL_HISTORY: historyFile
+                }
+            });
+
+            await waitForPrompt(cli);
+            await evaluate(cli, `'${uuid}'`);
+            await exit(cli);
+
+            const historyContents = await readFile(historyFile);
+            expect(historyContents.toString()).to.contain(uuid);
+        });
+
         it('is the default debug command.', async () => {
 
-            const cli = RunUtil.cli(['run', 'debug'], 'repl');
+            const cli = RunUtil.cli(['run', 'debug'], 'repl/main');
 
             await waitForPrompt(cli);
 
