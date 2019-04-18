@@ -1,6 +1,6 @@
 'use strict';
 
-const Hapi = require('hapi');
+const Hapi = require('@hapi/hapi');
 const Toys = require('toys');
 const HpalDebug = require('../../../..');
 
