@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@hapi/code": "5.x.x",
-    "@hapi/hapi": "^18.2.0",
+    "@hapi/hapi": "18.x.x",
     "@hapi/joi": "14.x.x",
     "@hapi/lab": "18.x.x",
     "coveralls": "3.x.x",
