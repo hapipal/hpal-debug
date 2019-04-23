@@ -42,10 +42,10 @@
   "devDependencies": {
     "@hapi/code": "5.x.x",
     "@hapi/hapi": "18.x.x",
-    "@hapi/joi": "14.x.x",
+    "@hapi/joi": "15.x.x",
     "@hapi/lab": "18.x.x",
     "coveralls": "3.x.x",
-    "hpal": "1.x.x",
+    "hpal": "2.x.x",
     "knex": "0.16.x",
     "objection": "1.x.x",
     "schmervice": "1.x.x",
