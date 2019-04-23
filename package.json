@@ -10,7 +10,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "lab -a code -t 100 -L",
+    "test": "lab -a @hapi/code -t 100 -L",
     "coveralls": "lab -r lcov | coveralls"
   },
   "repository": {
@@ -37,16 +37,16 @@
     "word-wrap": "1.x.x"
   },
   "peerDependencies": {
-    "hapi": ">=17 <19"
+    "@hapi/hapi": ">=17 <19"
   },
   "devDependencies": {
-    "code": "5.x.x",
+    "@hapi/code": "5.x.x",
+    "@hapi/hapi": "18.x.x",
+    "@hapi/joi": "14.x.x",
+    "@hapi/lab": "18.x.x",
     "coveralls": "3.x.x",
-    "hapi": "18.x.x",
     "hpal": "1.x.x",
-    "joi": "14.x.x",
     "knex": "0.16.x",
-    "lab": "18.x.x",
     "objection": "1.x.x",
     "schmervice": "1.x.x",
     "schwifty": "4.x.x",
