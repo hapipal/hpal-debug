@@ -1,7 +1,6 @@
 'use strict';
 
-const Hapi = require('@hapi/hapi');
-const Joi = require('@hapi/joi');
+const { Hapi, Joi } = require('../../run-util');
 const HpalDebug = require('../../..');
 
 exports.deployment = async () => {
@@ -43,11 +42,11 @@ exports.deployment = async () => {
             options: {
                 id: 'use-params',
                 validate: {
-                    params: {
+                    params: Joi.object({
                         one: Joi.number(),
                         two: Joi.string(),
                         three: Joi.string()
-                    }
+                    })
                 },
                 handler: ({ params }) => params
             }
@@ -58,11 +57,11 @@ exports.deployment = async () => {
             options: {
                 id: 'use-query',
                 validate: {
-                    query: {
+                    query: Joi.object({
                         isOne: Joi.boolean().truthy('true'),
                         two: Joi.number(),
                         three: Joi.string()
-                    }
+                    })
                 },
                 handler: ({ query }) => query
             }
@@ -73,10 +72,10 @@ exports.deployment = async () => {
             options: {
                 id: 'use-payload',
                 validate: {
-                    payload: {
+                    payload: Joi.object({
                         isOne: Joi.boolean().truthy('true'),
                         two: Joi.number()
-                    }
+                    })
                 },
                 handler: ({ payload }) => payload
             }
@@ -87,7 +86,7 @@ exports.deployment = async () => {
             options: {
                 id: 'use-deep-payload',
                 validate: {
-                    payload: {
+                    payload: Joi.object({
                         isOne: Joi.boolean().truthy('true'),
                         objOne: {
                             two: Joi.number(),
@@ -102,7 +101,7 @@ exports.deployment = async () => {
                                 seven: Joi.string()
                             }
                         }
-                    }
+                    })
                 },
                 handler: ({ payload }) => payload
             }
@@ -139,10 +138,10 @@ exports.deployment = async () => {
             options: {
                 id: 'use-joi-array-validation',
                 validate: {
-                    payload: {
+                    payload: Joi.object({
                         single: Joi.array().items(Joi.number()),
                         mixed: Joi.array().items(Joi.number(), Joi.string())
-                    }
+                    })
                 },
                 handler: ({ payload }) => payload
             }
@@ -153,15 +152,15 @@ exports.deployment = async () => {
             options: {
                 id: 'usage',
                 validate: {
-                    params: {
+                    params: Joi.object({
                         one: Joi.any()
-                    },
-                    query: {
+                    }),
+                    query: Joi.object({
                         two: Joi.any().description('Two things to know')
-                    },
-                    payload: {
+                    }),
+                    payload: Joi.object({
                         three: Joi.any()
-                    }
+                    })
                 },
                 handler: () => 'usage-result'
             }
@@ -179,7 +178,8 @@ exports.deployment = async () => {
             path: '/non-obj-payload',
             options: {
                 id: 'use-non-obj-payload',
-                handler: ({ payload }) => payload
+                // Avoid inconsistencies across hapi versions in empty responses
+                handler: ({ payload }) => payload || '[empty]'
             }
         },
         {

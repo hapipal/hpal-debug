@@ -43,15 +43,18 @@
   "devDependencies": {
     "@hapi/code": "5.x.x",
     "@hapi/hapi": "18.x.x",
+    "@hapi/hapi-19": "npm:@hapi/hapi@19",
     "@hapi/joi": "15.x.x",
-    "@hapi/lab": "18.x.x",
+    "@hapi/joi-17": "npm:@hapi/joi@17",
+    "@hapi/lab": "20.x.x",
+    "@hapi/somever": "2.x.x",
     "coveralls": "3.x.x",
     "hpal": "2.x.x",
-    "knex": "0.16.x",
-    "objection": "1.x.x",
+    "knex": "0.20.x",
+    "objection": "2.x.x",
     "schmervice": "1.x.x",
-    "schwifty": "4.x.x",
-    "strip-ansi": "5.x.x",
+    "schwifty": "5.x.x",
+    "strip-ansi": "6.x.x",
     "uuid": "3.x.x"
   }
 }

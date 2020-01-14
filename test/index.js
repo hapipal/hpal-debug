@@ -621,6 +621,38 @@ describe('hpal-debug', () => {
             `);
         });
 
+        it('can specify verbose mode with -v (with payload empty, non-object).', async () => {
+
+            const { output, err, errorOutput } = await curl(['use-non-obj-payload', '-v', '-H', 'content-type: text/plain'], { columns: 60 });
+
+            expect(err).to.not.exist();
+            expect(errorOutput).to.equal('');
+
+            validateVerboseOutput(normalize(output), `
+                post /non-obj-payload (?ms)
+
+                payload
+                ────────────────────────────────────────
+
+
+                request headers
+                ────────────────────────────────────────
+                 content-type    text/plain
+                 user-agent      shot
+                 host            hapipal:0
+
+                response headers
+                ────────────────────────────────────────
+                 content-type      text/html; charset=utf-8
+                 cache-control     no-cache
+                 content-length    7
+
+                result (200 ok)
+                ────────────────────────────────────────
+                [empty]
+            `);
+        });
+
         it('can specify raw, verbose mode with -rv (without payload).', async () => {
 
             const { output, err, errorOutput } = await curl(['use-query', '-v', '-r', '--isOne', '--two', '2'], { columns: 60 });

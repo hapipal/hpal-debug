@@ -1,8 +1,8 @@
 'use strict';
 
-const Hapi = require('@hapi/hapi');
 const Schwifty = require('schwifty');
 const Schmervice = require('schmervice');
+const { Hapi } = require('../../../run-util');
 const HpalDebug = require('../../../..');
 
 exports.deployment = async () => {
