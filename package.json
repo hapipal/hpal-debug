@@ -38,14 +38,14 @@
     "word-wrap": "1.x.x"
   },
   "peerDependencies": {
-    "@hapi/hapi": ">=17 <20"
+    "@hapi/hapi": ">=17 <21"
   },
   "devDependencies": {
     "@hapi/code": "5.x.x",
     "@hapi/hapi": "18.x.x",
-    "@hapi/hapi-19": "npm:@hapi/hapi@19",
+    "@hapi/hapi-20": "npm:@hapi/hapi@20",
     "@hapi/joi": "15.x.x",
-    "@hapi/joi-17": "npm:@hapi/joi@17",
+    "joi-17": "npm:joi@17",
     "@hapi/lab": "20.x.x",
     "@hapi/somever": "2.x.x",
     "coveralls": "3.x.x",
