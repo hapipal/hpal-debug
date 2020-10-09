@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/hapipal/hpal-debug#readme",
   "dependencies": {
-    "@hapi/bossy": "4.x.x",
+    "@hapi/bossy": "5.x.x",
     "cli-table": "0.3.x",
     "toys": "2.x.x",
     "word-wrap": "1.x.x"
@@ -45,11 +45,11 @@
     "@hapi/hapi": "18.x.x",
     "@hapi/hapi-20": "npm:@hapi/hapi@20",
     "@hapi/joi": "15.x.x",
-    "joi-17": "npm:joi@17",
     "@hapi/lab": "20.x.x",
     "@hapi/somever": "2.x.x",
     "coveralls": "3.x.x",
     "hpal": "2.x.x",
+    "joi-17": "npm:joi@17",
     "knex": "0.20.x",
     "objection": "2.x.x",
     "schmervice": "1.x.x",
