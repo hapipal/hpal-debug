@@ -49,7 +49,7 @@
     "coveralls": "3.x.x",
     "hpal": "2.x.x",
     "joi-17": "npm:joi@17",
-    "knex": "0.20.x",
+    "knex": "0.21.x",
     "objection": "2.x.x",
     "schmervice": "1.x.x",
     "schwifty": "5.x.x",
