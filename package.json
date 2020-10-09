@@ -4,7 +4,7 @@
   "description": "hapijs debugging tools for the hpal CLI",
   "main": "lib/index.js",
   "engines": {
-    "node": ">=8.9.0"
+    "node": ">=12"
   },
   "directories": {
     "test": "test"
