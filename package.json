@@ -38,7 +38,13 @@
     "word-wrap": "1.x.x"
   },
   "peerDependencies": {
-    "@hapi/hapi": ">=19 <21"
+    "@hapi/hapi": ">=19 <21",
+    "joi": ">=17 <18"
+  },
+  "peerDependenciesMeta": {
+    "joi": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@hapi/code": "8.x.x",
