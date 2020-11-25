@@ -10,7 +10,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "lab -a @hapi/code -t 100 -L -I \"FinalizationRegistry,WeakRef\"",
+    "test": "lab -a @hapi/code -t 100 -L",
     "coveralls": "lab -r lcov | coveralls"
   },
   "repository": {
@@ -33,8 +33,8 @@
   "homepage": "https://github.com/hapipal/hpal-debug#readme",
   "dependencies": {
     "@hapi/bossy": "5.x.x",
+    "@hapipal/toys": "3.x.x",
     "cli-table": "0.3.x",
-    "toys": "2.x.x",
     "word-wrap": "1.x.x"
   },
   "peerDependencies": {
@@ -43,16 +43,15 @@
   "devDependencies": {
     "@hapi/code": "8.x.x",
     "@hapi/hapi": "20.x.x",
-    "@hapi/joi": "15.x.x",
     "@hapi/lab": "24.x.x",
     "@hapi/somever": "3.x.x",
+    "@hapipal/schmervice": "2.x.x",
+    "@hapipal/schwifty": "6.x.x",
     "coveralls": "3.x.x",
     "hpal": "2.x.x",
-    "joi-17": "npm:joi@17",
+    "joi": "17.x.x",
     "knex": "0.21.x",
     "objection": "2.x.x",
-    "schmervice": "1.x.x",
-    "schwifty": "5.x.x",
     "strip-ansi": "6.x.x",
     "uuid": "8.x.x"
   }

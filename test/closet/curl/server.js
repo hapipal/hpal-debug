@@ -1,7 +1,6 @@
 'use strict';
 
 const Hapi = require('@hapi/hapi');
-
 const { Joi } = require('../../run-util');
 const HpalDebug = require('../../..');
 

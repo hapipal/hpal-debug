@@ -1,8 +1,8 @@
 'use strict';
 
-const Schwifty = require('schwifty');
-const Schmervice = require('schmervice');
 const Hapi = require('@hapi/hapi');
+const Schwifty = require('@hapipal/schwifty');
+const Schmervice = require('@hapipal/schmervice');
 const HpalDebug = require('../../../..');
 
 exports.deployment = async () => {
@@ -11,7 +11,7 @@ exports.deployment = async () => {
 
     await server.register([HpalDebug, Schwifty, Schmervice]);
 
-    server.schwifty(class MyModel extends Schwifty.Model {
+    server.registerModel(class MyModel extends Schwifty.Model {
         static get exists() {
 
             return 'indeedy';
@@ -19,7 +19,7 @@ exports.deployment = async () => {
     });
 
     // Clobberer
-    server.schwifty(class Buffer extends Schwifty.Model {
+    server.registerModel(class Buffer extends Schwifty.Model {
         static get exists() {
 
             return 'indeedy';

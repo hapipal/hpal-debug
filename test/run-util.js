@@ -2,34 +2,29 @@
 
 const Path = require('path');
 const Stream = require('stream');
-const Somever = require('@hapi/somever');
+const Joi = require('joi');
 const Hpal = require('hpal');
 const DisplayError = require('hpal/lib/display-error');
 
-exports.Joi = Somever.match(process.version, '>=12') ? require('joi-17') : require('@hapi/joi');
+exports.Joi = Joi.extend({
+    type: 'object',
+    base: Joi.object(),
+    coerce: {
+        from: 'string',
+        method(value) {
 
-if (Somever.match(process.version, '>=12')) {
-    // Restore string -> object coercion used in test
-    exports.Joi = exports.Joi.extend({
-        type: 'object',
-        base: exports.Joi.object(),
-        coerce: {
-            from: 'string',
-            method(value) {
-
-                if (value[0] !== '{' &&
-                    !/^\s*\{/.test(value)) {
-                    return;
-                }
-
-                try {
-                    return { value: JSON.parse(value) };
-                }
-                catch (ignoreErr) { }
+            if (value[0] !== '{' &&
+                !/^\s*\{/.test(value)) {
+                return;
             }
+
+            try {
+                return { value: JSON.parse(value) };
+            }
+            catch (ignoreErr) {}
         }
-    });
-}
+    }
+});
 
 exports.cli = (argv, cwd, { colors, columns, isTTY = false, env = {} } = {}) => {
 

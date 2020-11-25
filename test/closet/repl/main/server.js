@@ -1,7 +1,6 @@
 'use strict';
 
 const Hapi = require('@hapi/hapi');
-
 const HpalDebug = require('../../../..');
 
 exports.deployment = async () => {
