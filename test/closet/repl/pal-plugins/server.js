@@ -2,7 +2,7 @@
 
 const Schwifty = require('schwifty');
 const Schmervice = require('schmervice');
-const { Hapi } = require('../../../run-util');
+const Hapi = require('@hapi/hapi');
 const HpalDebug = require('../../../..');
 
 exports.deployment = async () => {

@@ -6,8 +6,6 @@ const Somever = require('@hapi/somever');
 const Hpal = require('hpal');
 const DisplayError = require('hpal/lib/display-error');
 
-exports.Hapi = Somever.match(process.version, '>=12') ? require('@hapi/hapi-20') : require('@hapi/hapi');
-
 exports.Joi = Somever.match(process.version, '>=12') ? require('joi-17') : require('@hapi/joi');
 
 if (Somever.match(process.version, '>=12')) {
