@@ -3,8 +3,8 @@
 const Path = require('path');
 const Stream = require('stream');
 const Joi = require('joi');
-const Hpal = require('hpal');
-const DisplayError = require('hpal/lib/display-error');
+const Hpal = require('@hapipal/hpal');
+const DisplayError = require('@hapipal/hpal/lib/display-error');
 
 exports.Joi = Joi.extend({
     type: 'object',

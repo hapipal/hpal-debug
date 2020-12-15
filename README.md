@@ -2,7 +2,7 @@
 
 hapijs debugging tools for the [hpal CLI](https://github.com/hapipal/hpal)
 
-[![Build Status](https://travis-ci.org/hapipal/hpal-debug.svg?branch=master)](https://travis-ci.org/hapipal/hpal-debug) [![Coverage Status](https://coveralls.io/repos/hapipal/hpal-debug/badge.svg?branch=master&service=github)](https://coveralls.io/github/hapipal/hpal-debug?branch=master)
+[![Build Status](https://travis-ci.com/hapipal/hpal-debug.svg?branch=master)](https://travis-ci.com/hapipal/hpal-debug) [![Coverage Status](https://coveralls.io/repos/hapipal/hpal-debug/badge.svg?branch=master&service=github)](https://coveralls.io/github/hapipal/hpal-debug?branch=master)
 
 Lead Maintainer - [Devin Ivy](https://github.com/devinivy)
 
@@ -15,19 +15,18 @@ Lead Maintainer - [Devin Ivy](https://github.com/devinivy)
     > `hpal run debug:curl post /user --name Pal -v`
 
 ## Installation
-> **Note**
-> If you're getting started with [the pal boilerplate](https://github.com/hapipal/boilerplate), then your project is already setup with hpal-debug!  If you would like to integrate hpal-debug into an existing pal boilerplate project, [here's](https://github.com/hapipal/boilerplate/pull/54/files) how we suggest doing it.
+> If you're getting started with [the pal boilerplate](https://github.com/hapipal/boilerplate), then your project is already setup with hpal-debug!
 
 1. Install the hpal-debug package from npm as a dev dependency.
 
    ```sh
-   npm install --save-dev hpal-debug
+   npm install --save-dev @hapipal/hpal-debug
    ```
 
 2. Register hpal-debug on your server as a hapi plugin.
 
    ```js
-   await server.register(require('hpal-debug'));
+   await server.register(require('@hapipal/hpal-debug'));
    ```
 
 3. Ensure `server.js` or `server/index.js` exports a function named `deployment` that returns your configured hapi server.
@@ -45,7 +44,7 @@ Lead Maintainer - [Devin Ivy](https://github.com/devinivy)
    // hpal will look for and use exports.deployment()
    // as defined below to obtain a hapi server
 
-   exports.deployment = async (start) => {
+   exports.deployment = async ({ start } = {}) => {
 
        const server = Hapi.server();
 
@@ -53,7 +52,7 @@ Lead Maintainer - [Devin Ivy](https://github.com/devinivy)
        await server.register(AppPlugin);
 
        if (process.env.NODE_ENV !== 'production') {
-           await server.register(require('hpal-debug'));
+           await server.register(require('@hapipal/hpal-debug'));
        }
 
        if (start) {
@@ -68,7 +67,7 @@ Lead Maintainer - [Devin Ivy](https://github.com/devinivy)
    // run directly from the CLI, i.e. "node ./server"
 
    if (!module.parent) {
-       exports.deployment(true);
+       exports.deployment({ start: true });
    }
    ```
 
@@ -79,6 +78,8 @@ npx hpal run debug:routes
 ```
 
 ## Usage
+> hpal-debug is intended for use with hapi v19+ and nodejs v12+ (_see v1 for lower support_).
+
 ### Commands
 #### `hpal run debug:routes`
 > ```
@@ -117,7 +118,7 @@ hpal>
 hpal> info.uri                    // at what URI would I access my server?
 'http://your-computer.local'
 hpal> Object.keys(registrations)  // what plugins are registered?
-[ 'hpal-debug', 'my-app' ]
+[ '@hapipal/hpal-debug', 'my-app' ]
 hpal> table().length              // how many routes are defined?
 12
 hpal> !!match('get', '/my/user')  // does this route exist?
@@ -135,7 +136,7 @@ This command makes a request to a route and displays the result.  Notably, you d
 
 It's required that you determine which route to hit by specifying a `<route-identifier>` as a route id (e.g. `user-create`), route method and path (e.g. `post /users`), or route path (e.g. `/users`, method defaulting to `get`).
 
-You may specify any payload, query, or path params as `<route-parameters>` flags or in the `<route-identifier>`.  Any parameter that utilizes Joi validation through [`route.options.validate`](https://github.com/hapijs/hapi/blob/master/API.md#route.options.validate) has a command line flag.  For example, a route with id `user-update`, method `patch`, and path `/user/{id}` that validates the `id` path parameter and a `hometown` payload parameter might be hit using the following commands,
+You may specify any payload, query, or path params as `<route-parameters>` flags or in the `<route-identifier>`.  Any parameter that utilizes Joi validation through [`route.options.validate`](https://hapi.dev/api/#route.options.validate) has a command line flag.  For example, a route with id `user-update`, method `patch`, and path `/user/{id}` that validates the `id` path parameter and a `hometown` payload parameter might be hit using the following commands,
 ```sh
 hpal run debug:curl patch /user/42 --hometown "Buenos Aires"
 

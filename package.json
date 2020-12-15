@@ -1,5 +1,5 @@
 {
-  "name": "hpal-debug",
+  "name": "@hapipal/hpal-debug",
   "version": "1.5.0",
   "description": "hapijs debugging tools for the hpal CLI",
   "main": "lib/index.js",
@@ -51,10 +51,10 @@
     "@hapi/hapi": "20.x.x",
     "@hapi/lab": "24.x.x",
     "@hapi/somever": "3.x.x",
+    "@hapipal/hpal": "3.x.x",
     "@hapipal/schmervice": "2.x.x",
     "@hapipal/schwifty": "6.x.x",
     "coveralls": "3.x.x",
-    "hpal": "2.x.x",
     "joi": "17.x.x",
     "knex": "0.21.x",
     "objection": "2.x.x",
