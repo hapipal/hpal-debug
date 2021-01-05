@@ -76,7 +76,7 @@ describe('hpal-debug', () => {
             expect(output1).to.equal('\'config-item\'');
 
             const output2 = await evaluate(cli, 'server.registrations');
-            expect(output2).to.contain('name: \'hpal-debug\'');
+            expect(output2).to.contain('name: \'@hapipal/hpal-debug\'');
 
             const output3 = await evaluate(cli, 'server.myDecoration()');
             expect(output3).to.equal('\'my-decoration\'');
@@ -94,7 +94,7 @@ describe('hpal-debug', () => {
             expect(output1).to.equal('\'config-item\'');
 
             const output2 = await evaluate(cli, 'registrations');
-            expect(output2).to.contain('name: \'hpal-debug\'');
+            expect(output2).to.contain('name: \'@hapipal/hpal-debug\'');
 
             const output3 = await evaluate(cli, 'myDecoration()');
             expect(output3).to.equal('\'my-decoration\'');
@@ -513,15 +513,15 @@ describe('hpal-debug', () => {
 
                 request headers
                 ────────────────────────────────────────
-                 user-agent    shot
-                 host          hapipal:0
+                user-agent    shot
+                host          hapipal:0
 
                 response headers
                 ────────────────────────────────────────
-                 content-type      application/json; charset=utf-8
-                 cache-control     no-cache
-                 content-length    22
-                 accept-ranges     bytes
+                content-type      application/json; charset=utf-8
+                cache-control     no-cache
+                content-length    22
+                accept-ranges     bytes
 
                 result (200 ok)
                 ────────────────────────────────────────
@@ -541,15 +541,15 @@ describe('hpal-debug', () => {
 
                 request headers
                 ────────────────────────────────────────
-                 user-agent    shot
-                 host          hapipal:0
+                user-agent    shot
+                host          hapipal:0
 
                 response headers
                 ────────────────────────────────────────
-                 content-type      application/json; charset=utf-8
-                 cache-control     no-cache
-                 content-length    22
-                 accept-ranges     bytes
+                content-type      application/json; charset=utf-8
+                cache-control     no-cache
+                content-length    22
+                accept-ranges     bytes
 
                 result (200 ok)
                 ────────────────────────────────────────
@@ -568,20 +568,20 @@ describe('hpal-debug', () => {
 
                 payload
                 ────────────────────────────────────────
-                 isOne    true
-                 two      2
+                isOne    true
+                two      2
 
                 request headers
                 ────────────────────────────────────────
-                 user-agent        shot
-                 host              hapipal:0
-                 content-length    22
+                user-agent        shot
+                host              hapipal:0
+                content-length    22
 
                 response headers
                 ────────────────────────────────────────
-                 content-type      application/json; charset=utf-8
-                 cache-control     no-cache
-                 content-length    22
+                content-type      application/json; charset=utf-8
+                cache-control     no-cache
+                content-length    22
 
                 result (200 ok)
                 ────────────────────────────────────────
@@ -604,16 +604,16 @@ describe('hpal-debug', () => {
 
                 request headers
                 ────────────────────────────────────────
-                 content-type      text/plain
-                 user-agent        shot
-                 host              hapipal:0
-                 content-length    9
+                content-type      text/plain
+                user-agent        shot
+                host              hapipal:0
+                content-length    9
 
                 response headers
                 ────────────────────────────────────────
-                 content-type      text/html; charset=utf-8
-                 cache-control     no-cache
-                 content-length    9
+                content-type      text/html; charset=utf-8
+                cache-control     no-cache
+                content-length    9
 
                 result (200 ok)
                 ────────────────────────────────────────
@@ -637,15 +637,15 @@ describe('hpal-debug', () => {
 
                 request headers
                 ────────────────────────────────────────
-                 content-type    text/plain
-                 user-agent      shot
-                 host            hapipal:0
+                content-type    text/plain
+                user-agent      shot
+                host            hapipal:0
 
                 response headers
                 ────────────────────────────────────────
-                 content-type      text/html; charset=utf-8
-                 cache-control     no-cache
-                 content-length    7
+                content-type      text/html; charset=utf-8
+                cache-control     no-cache
+                content-length    7
 
                 result (200 ok)
                 ────────────────────────────────────────
@@ -722,14 +722,14 @@ describe('hpal-debug', () => {
 
                 request headers
                 ────────────────────────────────────────
-                 user-agent    shot
-                 host          hapipal:0
+                user-agent    shot
+                host          hapipal:0
 
                 response headers
                 ────────────────────────────────────────
-                 content-type      application/json; charset=utf-8
-                 cache-control     no-cache
-                 content-length    18
+                content-type      application/json; charset=utf-8
+                cache-control     no-cache
+                content-length    18
 
                 result (420 unknown)
                 ────────────────────────────────────────
