@@ -26,7 +26,7 @@ exports.Joi = Joi.extend({
     }
 });
 
-exports.cli = (argv, cwd, { colors, columns, isTTY = false, env = {} } = {}) => {
+exports.cli = (argv, cwd, { colors, columns, isTTY = true, env = {} } = {}) => {
 
     argv = ['x', 'x'].concat(argv); // [node, script, ...args]
     cwd = cwd ? (Path.isAbsolute(cwd) ? cwd : `${__dirname}/closet/${cwd}`) : __dirname;

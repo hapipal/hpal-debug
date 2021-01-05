@@ -95,6 +95,8 @@ Columns may be hidden or shown using the `-H` `--hide` and `-s` `--show` flags r
 
 `method` `path` `id` `plugin` `vhost` `auth` `cors` `tags` `description`
 
+The `-r` `--raw` flag will output a minimally formatted table with columns separated by tab characters.  Non-TTY usage automatically defaults to raw output.
+
 A summary of these options can be displayed with the `-h` `--help` flag.
 
 #### `hpal run debug:repl`
@@ -158,7 +160,7 @@ The `-d` `--data` flag may be used to specify a request payload as a raw string.
 
 The `-H` `--header` flag may be used to specify a request header in the format `header-name: header value`.  This flag may be used multiple times to set multiple headers.
 
-The `-r` `--raw` and `-v` `--verbose` flags affect the command's output, and may be used in tandem with each other or separately.  The `-r` `--raw` flag ensures all output is unformatted, while the `-v` `--verbose` flag shows information about the request and response including timing, the request payload, request headers, response headers, status code, and response payload.
+The `-r` `--raw` and `-v` `--verbose` flags affect the command's output, and may be used in tandem with each other or separately.  The `-r` `--raw` flag ensures all output is unformatted, while the `-v` `--verbose` flag shows information about the request and response including timing, the request payload, request headers, response headers, status code, and response payload.  Non-TTY usage automatically defaults to raw output.
 
 A summary of these options can be displayed with the `-h` `--help` flag.
 

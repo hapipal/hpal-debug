@@ -5,7 +5,6 @@
 const Fs = require('fs');
 const Os = require('os');
 const Path = require('path');
-const { REPLServer } = require('repl');
 const Util = require('util');
 const Lab = require('@hapi/lab');
 const Code = require('@hapi/code');
@@ -62,7 +61,13 @@ describe('hpal-debug', () => {
             await cli;
         };
 
-        const repl = (args = [], dir = 'main', opts) => RunUtil.cli(['run', 'debug:repl', ...args], `repl/${dir}`, opts);
+        const repl = (args = [], dir = 'main', opts) => {
+
+            return RunUtil.cli(['run', 'debug:repl', ...args], `repl/${dir}`, {
+                isTTY: false, // Disables colors
+                ...opts
+            });
+        };
 
         const readFile = Util.promisify(Fs.readFile);
 
@@ -179,15 +184,10 @@ describe('hpal-debug', () => {
 
         it('sets-up history when applicable.', async () => {
 
-            if (!REPLServer.prototype.setupHistory) {
-                return;
-            }
-
             const uuid = Uuid.v4();
             const historyFile = Path.join(Os.tmpdir(), uuid);
 
             const cli = RunUtil.cli(['run', 'debug'], 'repl/main', {
-                isTTY: true,
                 env: {
                     NODE_REPL_HISTORY: historyFile
                 }
@@ -203,7 +203,7 @@ describe('hpal-debug', () => {
 
         it('is the default debug command.', async () => {
 
-            const cli = RunUtil.cli(['run', 'debug'], 'repl/main');
+            const cli = RunUtil.cli(['run', 'debug'], 'repl/main', { isTTY: false });
 
             await waitForPrompt(cli);
 
@@ -498,6 +498,61 @@ describe('hpal-debug', () => {
             expect(normalize(output2)).to.equal('{"isOne":true,"two":2}');
         });
 
+        it('defaults to raw output when out is not a terminal.', async () => {
+
+            const {
+                output: output,
+                err: err,
+                errorOutput: errorOutput
+            } = await curl(['use-payload', '--isOne', '--two', '2'], {
+                isTTY: false
+            });
+
+            expect(err).to.not.exist();
+            expect(errorOutput).to.equal('');
+            expect(normalize(output)).to.equal('{"isOne":true,"two":2}');
+        });
+
+        it('defaults to raw output when out is not a terminal with -v, --verbose flag.', async () => {
+
+            const {
+                output: output,
+                err: err,
+                errorOutput: errorOutput
+            } = await curl(['use-payload', '-v', '--isOne', '--two', '2'], {
+                isTTY: false
+            });
+
+            // Ensuring lack of output columns is okay
+
+            expect(err).to.not.exist();
+            expect(errorOutput).to.equal('');
+            validateVerboseOutput(normalize(output), `
+                post /payload (?ms)
+
+                payload
+                ───────────
+                {"isOne":true,"two":"2"}
+
+                request headers
+                ───────────
+                user-agent: shot
+                host: hapipal:0
+                content-type: application/json
+                content-length: 24
+
+                response headers
+                ───────────
+                content-type: application/json; charset=utf-8
+                cache-control: no-cache
+                content-length: 22
+
+                result (200 ok)
+                ───────────
+                {"isOne":true,"two":2}
+            `);
+        });
+
         it('can specify verbose mode with -v, --verbose flag (without payload).', async () => {
 
             const {
@@ -740,7 +795,11 @@ describe('hpal-debug', () => {
 
     describe('routes command', () => {
 
-        const normalize = (str) => {
+        const normalize = (str, { multiline } = {}) => {
+
+            if (multiline) {
+                return str.trim().split('\n').map((s) => s.trim()).join('\n');
+            }
 
             return str.trim();
         };
@@ -914,6 +973,41 @@ describe('hpal-debug', () => {
                 ├───────────┼─────────────┼─────────────────┼─────────────────┼──────────────┤
                 │ shorthand │             │ first-strategy  │ *               │ my-tag       │
                 └───────────┴─────────────┴─────────────────┴─────────────────┴──────────────┘
+            `));
+        });
+
+        it('can specify raw mode with -r, --raw flag.', async () => {
+
+            const args = [
+                '--raw',
+                '--show', 'auth'
+            ];
+
+            const { output, err, errorOutput } = await routes(args, 'main');
+
+            expect(err).to.not.exist();
+            expect(errorOutput).to.equal('');
+            expect(normalize(output.replace(/\t/g, ' '), { multiline: true })).to.equal(unindent(`
+                method path       id        plugin    auth                                  description
+                get    /empty               (root)    (none)
+                patch  /longhand  longhand  my-plugin (try) first-strategy, second-strategy Instead, a longhand config
+                put    /shorthand shorthand my-plugin first-strategy                        Shorthand config
+            `));
+        });
+
+        it('defaults to raw output when out is not a terminal.', async () => {
+
+            const args = ['--show', 'auth'];
+
+            const { output, err, errorOutput } = await routes(args, 'main', { isTTY: false });
+
+            expect(err).to.not.exist();
+            expect(errorOutput).to.equal('');
+            expect(normalize(output.replace(/\t/g, ' '), { multiline: true })).to.equal(unindent(`
+                method path       id        plugin    auth                                  description
+                get    /empty               (root)    (none)
+                patch  /longhand  longhand  my-plugin (try) first-strategy, second-strategy Instead, a longhand config
+                put    /shorthand shorthand my-plugin first-strategy                        Shorthand config
             `));
         });
 
