@@ -32,13 +32,13 @@
   },
   "homepage": "https://github.com/hapipal/hpal-debug#readme",
   "dependencies": {
-    "@hapi/bossy": "5.x.x",
-    "@hapipal/toys": "3.x.x",
-    "cli-table": "0.3.x",
-    "word-wrap": "1.x.x"
+    "@hapi/bossy": "^5.0.0",
+    "@hapipal/toys": "^3.2.0",
+    "cli-table": "^0.3.0",
+    "word-wrap": "^1.0.0"
   },
   "peerDependencies": {
-    "@hapi/hapi": ">=19 <21",
+    "@hapi/hapi": ">=19 <22",
     "joi": ">=17 <18"
   },
   "peerDependenciesMeta": {
@@ -47,18 +47,18 @@
     }
   },
   "devDependencies": {
-    "@hapi/code": "8.x.x",
-    "@hapi/hapi": "20.x.x",
-    "@hapi/lab": "24.x.x",
-    "@hapi/somever": "3.x.x",
-    "@hapipal/hpal": "3.x.x",
-    "@hapipal/schmervice": "2.x.x",
-    "@hapipal/schwifty": "6.x.x",
-    "coveralls": "3.x.x",
-    "joi": "17.x.x",
-    "knex": "0.21.x",
-    "objection": "2.x.x",
-    "strip-ansi": "6.x.x",
-    "uuid": "8.x.x"
+    "@hapi/code": "^8.0.0",
+    "@hapi/hapi": "^20.0.0",
+    "@hapi/lab": "^24.0.0",
+    "@hapi/somever": "^3.0.0",
+    "@hapipal/hpal": "^3.0.0",
+    "@hapipal/schmervice": "^2.0.0",
+    "@hapipal/schwifty": "^6.0.0",
+    "coveralls": "^3.0.0",
+    "joi": "^17.0.0",
+    "knex": "^0.21.0",
+    "objection": "^2.0.0",
+    "strip-ansi": "^6.0.0",
+    "uuid": "^8.0.0"
   }
 }

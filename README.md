@@ -2,7 +2,7 @@
 
 hapijs debugging tools for the [hpal CLI](https://github.com/hapipal/hpal)
 
-[![Build Status](https://travis-ci.com/hapipal/hpal-debug.svg?branch=master)](https://travis-ci.com/hapipal/hpal-debug) [![Coverage Status](https://coveralls.io/repos/hapipal/hpal-debug/badge.svg?branch=master&service=github)](https://coveralls.io/github/hapipal/hpal-debug?branch=master)
+[![Build Status](https://travis-ci.com/hapipal/hpal-debug.svg?branch=main)](https://travis-ci.com/hapipal/hpal-debug) [![Coverage Status](https://coveralls.io/repos/hapipal/hpal-debug/badge.svg?branch=main&service=github)](https://coveralls.io/github/hapipal/hpal-debug?branch=main)
 
 Lead Maintainer - [Devin Ivy](https://github.com/devinivy)
 
